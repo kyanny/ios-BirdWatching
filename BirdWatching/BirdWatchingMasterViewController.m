@@ -12,6 +12,7 @@
 
 #import "BirdSightingDataController.h"
 #import "BirdSighting.h"
+#import "AddSightingViewController.h"
 
 @implementation BirdWatchingMasterViewController
 
@@ -24,6 +25,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationItem.rightBarButtonItem.accessibilityHint = @"Adds a new bird-sighting event";
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,4 +81,20 @@
     }
 }
 
+- (IBAction)done:(UIStoryboardPopoverSegue *)segue {
+    if ([[segue identifier] isEqualToString:@"ReturnInput"]) {
+        AddSightingViewController *addController = [segue sourceViewController];
+        if (addController.birdSighting) {
+            [self.dataController addBirdSightingWithSighting:addController.birdSighting];
+            [self.tableView reloadData];
+        }
+        [self dismissViewControllerAnimated:YES completion:NULL];
+    }
+}
+
+- (IBAction)cancel:(UIStoryboardPopoverSegue *)segue {
+    if ([[segue identifier] isEqualToString:@"CancelInput"]) {
+        [self dismissViewControllerAnimated:YES completion:NULL];
+    }
+}
 @end
